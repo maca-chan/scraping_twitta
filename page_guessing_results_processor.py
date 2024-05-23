@@ -4,6 +4,9 @@ from sys import argv
 
 
 # Variable global que almacena el número de páginas real a adivinar
+# Se inicializa en 0 y se modifica en la función principal
+# La hacemos global para poder acceder a ella desde las funciones que la requieran sin necesidad de pasarla como argumento
+# Esto simplifica sus firmas y es útil para funciones anidadas, pero no es algo de lo que abusar
 pages_count = 0
 
 
