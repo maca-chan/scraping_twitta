@@ -393,6 +393,6 @@ def main():
     scrape_tweets()
     save_to_csv()
 
-
+# se procesará esta función al ejecutar el código
 if __name__ == "__main__":
     main()
