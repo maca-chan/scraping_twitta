@@ -21,7 +21,9 @@ from webdriver_manager.firefox import GeckoDriverManager
 
 TWITTER_LOGIN_URL = "https://twitter.com/i/flow/login"
 
-
+# Cubrir estos datos para que funcione. Hay que añadir los datos de login (mail, username, password)
+# Path es para incluir la ruta en la que está instalado el webdriver, el resto de variables
+# son variables que se usan durante la ejecución del código
 mail = ""
 username = ""
 password = ""
@@ -32,11 +34,10 @@ tweet_cards = []
 
 
 # Driver
-
-
 def _get_driver():
     header = Headers().generate()["User-Agent"]
-
+    # dependiendo del navegador que usemos, se usará
+    # la linea de chrome (en el comentario) o la de firefox
     # browser_option = ChromeOptions()
     browser_option = FirefoxOptions()
     browser_option.add_argument("--no-sandbox")
@@ -73,11 +74,11 @@ def _get_driver():
             print(f"Error setting up WebDriver: {e}")
             sys.exit(1)
 
-
+# Buscamos el driver y si no lo tenemos descargado en el PC
+# lo descarga automáticamente
 driver = _get_driver()
 
 ###
-
 
 def _input_username():
     input_attempt = 0
@@ -160,7 +161,8 @@ It may be due to the following:
                 print("Re-attempting to input password...")
                 sleep(2)
     
-
+# Función que hacer la operación de loguearse en twitter. 
+# Para ello, primero introduce el usuario, 
 def login():
     print()
     print("Logging in to Twitter...")
@@ -275,7 +277,7 @@ def get_tweet(card):
 def scrape_tweets():
     go_to_path()
 
-    # Accept cookies to make the banner disappear
+    # Aceptar cookies para que desaparezca el banner
     try:
         accept_cookies_btn = driver.find_element(
         "xpath", "//span[text()='Refuse non-essential cookies']/../../..")
@@ -288,6 +290,8 @@ def scrape_tweets():
     empty_count = 0
     retry_cnt = 0
 
+    # bucle principal que va iterando sobre los tweets y guardando
+    # la información en la variable data
     while True:
         try:
             tweet_cards = get_tweet_cards()
@@ -353,22 +357,27 @@ def scrape_tweets():
 
     print("")
 
-
+# se guardan los datos scrapeados en formato CSV
 def save_to_csv():
     print("Saving Tweets to CSV...")
     now = datetime.now()
     folder_path = "./tweets/"
 
+    # los datos se van a guardar en la carpeta tweets de nuestro directorio del script
+    # así que si no existe esa carpeta, la crea.
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
         print("Created Folder: {}".format(folder_path))
 
+    # se guarda el usuario, hora y contenido del tweet
     csv_data = {
         "Handle": [tweet[0] for tweet in data],
         "Timestamp": [tweet[1] for tweet in data],
         "Content": [tweet[2] for tweet in data],
     }
 
+    # se genera el dataframe con pandas (formato para almacenar los datos
+    # en un fichero estructurado 
     df = pd.DataFrame(csv_data)
 
     current_time = now.strftime("%Y-%m-%d_%H-%M-%S")
@@ -378,7 +387,7 @@ def save_to_csv():
 
     print("CSV Saved: {}".format(file_path))
 
-
+# Código principal del script
 def main():
     login()
     scrape_tweets()
