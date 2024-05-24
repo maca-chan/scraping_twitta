@@ -162,25 +162,24 @@ It may be due to the following:
                 sleep(2)
     
 # Función que hacer la operación de loguearse en twitter. 
-# Para ello, primero introduce el usuario, 
 def login():
     print()
-    print("Logging in to Twitter...")
+    print("Logging in to Twitter...") # escribe por terminal que se está accediendo al logging de twitter
 
     try:
-        driver.maximize_window()
-        driver.get(TWITTER_LOGIN_URL)
-        sleep(5)  # TODO: should be a proper wait
+        driver.maximize_window() # maximiza la ventana
+        driver.get(TWITTER_LOGIN_URL) # entra a la url de login
+        sleep(5)  # espera a que cargue la página
 
-        _input_username()
+        _input_username() # introduce usuario
         _input_unusual_activity()
-        _input_password()
+        _input_password() # introduce contraseña
 
-        cookies = driver.get_cookies()
+        cookies = driver.get_cookies() # crea las cookies para mantenerse conectado
 
         auth_token = None
-
-        for cookie in cookies:
+        # guarda las cookies
+        for cookie in cookies: 
             if cookie["name"] == "auth_token":
                 auth_token = cookie["value"]
                 break
